@@ -26,6 +26,14 @@ const Sidebar = () => {
       </div>
       <div className="fixed bottom-5 w-64 p-3">
         <Button className="w-full">+ Create Form</Button>
+        <div>
+          <progress
+            className="progress progress-info w-56"
+            value="100"
+            max="100"
+          ></progress>
+          
+        </div>
       </div>
     </div>
   );
