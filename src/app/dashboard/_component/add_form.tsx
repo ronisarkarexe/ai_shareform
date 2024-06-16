@@ -1,23 +1,23 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { aiGenerateModel } from "@/ai_model/ai_model";
 import { PROMPT_TEXT } from "@/prompt/prompt";
+import { useRouter } from "next/navigation";
 
 const AddForm = () => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [formInput, setFormInput] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   const handelSave = async () => {
     try {
@@ -25,8 +25,29 @@ const AddForm = () => {
       const sendDateFormate = "Description: " + formInput + PROMPT_TEXT;
       const result = await aiGenerateModel.sendMessage(sendDateFormate);
       if (result.response.text()) {
-        setLoading(false);
-        setOpenDialog(false);
+        const formData = {
+          jsonForm: result.response.text(),
+        };
+        try {
+          const response = await fetch("http://localhost:8000/api/v1/forms", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          });
+          if (response.ok) {
+            const data = await response.json();
+            if (data.data.id) {
+              router.push(data.data.id);
+            }
+            setLoading(false);
+            setOpenDialog(false);
+          }
+        } catch (error) {
+          setLoading(false);
+          setOpenDialog(false);
+        }
       }
     } catch (error) {
       setLoading(false);
