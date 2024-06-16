@@ -93,6 +93,44 @@ const EditForm = ({ params }: { params: { id: string } }) => {
     }
   };
 
+  const onFieldDelete = async (index: number) => {
+    if (formData) {
+      const updatedFields = formData.fields.filter((_, i) => i !== index);
+      const newData = {
+        ...formData,
+        fields: updatedFields,
+      };
+      if (updatedFields != null) {
+        try {
+          const response = await fetch(
+            `http://localhost:8000/api/v1/forms/${id}`,
+            {
+              method: "PATCH",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(newData),
+            }
+          );
+  
+          if (response.ok) {
+            const data = await response.json();
+            const jsonMatch = data.data.jsonForm.match(/{[\s\S]*}/);
+            if (!jsonMatch) {
+              throw new Error("Invalid JSON format");
+            }
+            const jsonString = jsonMatch[0];
+            setFormData(JSON.parse(jsonString) as IForm);
+          } else {
+            console.error("Form submission failed:", response.statusText);
+          }
+        } catch (error) {
+          console.error("Error submitting form:", error);
+        }
+      }
+    }
+  };
+
   return (
     <div className="p-3">
       <h1
@@ -110,6 +148,7 @@ const EditForm = ({ params }: { params: { id: string } }) => {
             <FormFieldView
               formValue={formData}
               onFieldSaveUpdate={onFieldSaveUpdate}
+              onFieldDelete={onFieldDelete}
             />
           )}
         </div>

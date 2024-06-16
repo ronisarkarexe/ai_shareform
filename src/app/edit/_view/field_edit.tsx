@@ -9,10 +9,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { IFormFields } from "@/model/form.model";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const FieldEdit = (props: {
   defaultValue: IFormFields;
   onSaveUpdate: (value: any) => void;
+  onDelete: () => void;
 }) => {
   const [fieldLabel, setFieldLabel] = useState<string | undefined>(
     props?.defaultValue?.label
@@ -56,7 +67,25 @@ const FieldEdit = (props: {
           </Button>
         </PopoverContent>
       </Popover>
-      <Trash className="h-4 w-4 cursor-pointer text-red-500" />
+
+      <AlertDialog>
+        <AlertDialogTrigger>
+          <Trash className="h-4 w-4 cursor-pointer text-red-500" />
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Are you sure, want to delete this field?
+            </AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={props.onDelete}>
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

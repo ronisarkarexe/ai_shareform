@@ -15,9 +15,8 @@ import FieldEdit from "./field_edit";
 const FormFieldView = (props: {
   formValue: IForm;
   onFieldSaveUpdate: (value: any, index: number) => void;
+  onFieldDelete: (index: number) => void;
 }) => {
-  //   console.log(props.formValue);
-
   const getViewForm = (field: IFormFields) => {
     switch (field.fieldType) {
       case "text":
@@ -114,6 +113,7 @@ const FormFieldView = (props: {
                   onSaveUpdate={(value) =>
                     props.onFieldSaveUpdate(value, index)
                   }
+                  onDelete={() => props.onFieldDelete(index)}
                 />
               </div>
               {getViewForm(field)}
