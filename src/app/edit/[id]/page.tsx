@@ -1,11 +1,13 @@
 "use client";
 import { FormData, IForm } from "@/model/form.model";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Eye, Share2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import FormFieldView from "../_view/form_field";
 import { toast } from "sonner";
 import Customized from "../_customized/customized";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const EditForm = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -138,12 +140,26 @@ const EditForm = ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="p-3">
-      <h1
-        className="flex gap-2 items-center mt-1 my-2 cursor-pointer text-lg hover:font-bold text-primary"
-        onClick={() => router.back()}
-      >
-        <ArrowLeft className="" /> Back
-      </h1>
+      <div className="flex item-center justify-between">
+        <h1
+          className="flex gap-2 items-center mt-1 my-2 cursor-pointer hover:font-bold text-primary text-sm"
+          onClick={() => router.back()}
+        >
+          <ArrowLeft className="h-4 w-4" /> Back
+        </h1>
+        <div className="flex gap-2 mb-3">
+          <Link href={"/aiform/" + id} target="_blank">
+            <Button className="flex gap-2">
+              {" "}
+              <Eye className="w-5 h-5" /> Live Preview
+            </Button>
+          </Link>
+          <Button className="flex gap-2">
+            {" "}
+            <Share2 className="w-5 h-5" /> Share
+          </Button>
+        </div>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
         <div className="border rounded-md shadow-sm p-3 border-primary">
           <Customized selectedTheme={(value) => setSelectedTheme(value)} />
@@ -155,6 +171,7 @@ const EditForm = ({ params }: { params: { id: string } }) => {
               onFieldSaveUpdate={onFieldSaveUpdate}
               onFieldDelete={onFieldDelete}
               selectedTheme={selectedTheme}
+              isEdit={true}
             />
           )}
         </div>

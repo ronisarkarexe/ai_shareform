@@ -17,6 +17,7 @@ const FormFieldView = (props: {
   onFieldSaveUpdate: (value: any, index: number) => void;
   onFieldDelete: (index: number) => void;
   selectedTheme: string;
+  isEdit: boolean;
 }) => {
   const getViewForm = (field: IFormFields) => {
     switch (field.fieldType) {
@@ -112,13 +113,15 @@ const FormFieldView = (props: {
                 <label className="text-sm text-primary">
                   {field.fieldTitle}
                 </label>
-                <FieldEdit
-                  defaultValue={field}
-                  onSaveUpdate={(value) =>
-                    props.onFieldSaveUpdate(value, index)
-                  }
-                  onDelete={() => props.onFieldDelete(index)}
-                />
+                {props.isEdit && (
+                  <FieldEdit
+                    defaultValue={field}
+                    onSaveUpdate={(value) =>
+                      props.onFieldSaveUpdate(value, index)
+                    }
+                    onDelete={() => props.onFieldDelete(index)}
+                  />
+                )}
               </div>
               {getViewForm(field)}
             </div>

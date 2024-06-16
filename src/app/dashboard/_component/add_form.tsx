@@ -41,7 +41,7 @@ const AddForm = () => {
             const data = await response.json();
             if (data.data.id) {
               toast("Form added successfully!");
-              router.push("edit", data.data.id);
+              router.push("/edit/", data.data.id);
             }
             setLoading(false);
             setOpenDialog(false);
