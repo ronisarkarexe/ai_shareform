@@ -172,6 +172,7 @@ const EditForm = ({ params }: { params: { id: string } }) => {
               onFieldDelete={onFieldDelete}
               selectedTheme={selectedTheme}
               isEdit={true}
+              onSaveForm={() => console.log()}
             />
           )}
         </div>

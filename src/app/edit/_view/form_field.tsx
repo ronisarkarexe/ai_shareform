@@ -1,6 +1,7 @@
+"use client";
 import { Input } from "@/components/ui/input";
 import { IForm, IFormFields } from "@/model/form.model";
-import React from "react";
+import React, { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -18,7 +19,34 @@ const FormFieldView = (props: {
   onFieldDelete: (index: number) => void;
   selectedTheme: string;
   isEdit: boolean;
+  onSaveForm: (value: any) => void;
 }) => {
+  const [formData, setFormData] = useState<null>(null);
+
+  const handelResponseForm = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value, type } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handelSelectChange = (name: string, value: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  // const handelCheckBoxChange = () => {};
+
+  const onFormSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    props.onSaveForm(formData);
+  };
+
   const getViewForm = (field: IFormFields) => {
     switch (field.fieldType) {
       case "text":
@@ -29,6 +57,8 @@ const FormFieldView = (props: {
               type={field.fieldType}
               placeholder={field.placeholder}
               name={field.fieldName}
+              onChange={(e) => handelResponseForm(e)}
+              required={field.required}
             />
           </div>
         );
@@ -39,6 +69,8 @@ const FormFieldView = (props: {
               type={field.fieldType}
               placeholder={field.placeholder}
               name={field.fieldName}
+              onChange={(e) => handelResponseForm(e)}
+              required={field.required}
             />
           </div>
         );
@@ -49,20 +81,32 @@ const FormFieldView = (props: {
               type={field.fieldType}
               placeholder={field.placeholder}
               name={field.fieldName}
+              onChange={(e) => handelResponseForm(e)}
+              required={field.required}
             />
           </div>
         );
       case "textarea":
         return (
           <div>
-            <Textarea placeholder={field.placeholder} name={field.fieldName} />
+            <Textarea
+              placeholder={field.placeholder}
+              name={field.fieldName}
+              onChange={(e) => handelResponseForm(e)}
+            />
           </div>
         );
       case "checkbox":
         return (
           <div>
             <div className="flex items-center space-x-2">
-              <Checkbox id={field.fieldName} />
+              <Checkbox
+                id={field.fieldName}
+                required={field.required}
+                // onCheckedChange={(e) =>
+                //   handelCheckBoxChange(field.fieldName, e)
+                // }
+              />
               <label
                 htmlFor={field.fieldName}
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -75,7 +119,9 @@ const FormFieldView = (props: {
       case "select":
         return (
           <div>
-            <Select>
+            <Select
+              onValueChange={(v) => handelSelectChange(field.fieldName, v)}
+            >
               <SelectTrigger className="w-full bg-transparent">
                 <SelectValue placeholder={field.placeholder} />
               </SelectTrigger>
@@ -95,7 +141,8 @@ const FormFieldView = (props: {
   };
 
   return (
-    <div
+    <form
+      onSubmit={onFormSubmit}
       className="border p-3 rounded-md shadow-sm"
       data-theme={props.selectedTheme}
     >
@@ -130,7 +177,10 @@ const FormFieldView = (props: {
       ) : (
         <div></div>
       )}
-    </div>
+      <button type="submit" className="btn btn-outline btn-primary btn-sm mt-2">
+        Save
+      </button>
+    </form>
   );
 };
 
