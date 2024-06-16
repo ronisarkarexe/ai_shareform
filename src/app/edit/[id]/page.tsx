@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import FormFieldView from "../_view/form_field";
 import { toast } from "sonner";
+import Customized from "../_customized/customized";
 
 const EditForm = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const [data, setData] = useState<FormData | null>(null);
   const [formData, setFormData] = useState<IForm | null>(null);
   const [loading, setLoading] = useState(true);
+  const [selectedTheme, setSelectedTheme] = useState<string>("light");
   const router = useRouter();
 
   useEffect(() => {
@@ -144,7 +146,7 @@ const EditForm = ({ params }: { params: { id: string } }) => {
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
         <div className="border rounded-md shadow-sm p-3 border-primary">
-          controller
+          <Customized selectedTheme={(value) => setSelectedTheme(value)} />
         </div>
         <div className="md:col-span-2 border border-primary rounded-md h-full p-3">
           {formData != null && (
@@ -152,6 +154,7 @@ const EditForm = ({ params }: { params: { id: string } }) => {
               formValue={formData}
               onFieldSaveUpdate={onFieldSaveUpdate}
               onFieldDelete={onFieldDelete}
+              selectedTheme={selectedTheme}
             />
           )}
         </div>

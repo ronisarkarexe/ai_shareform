@@ -16,6 +16,7 @@ const FormFieldView = (props: {
   formValue: IForm;
   onFieldSaveUpdate: (value: any, index: number) => void;
   onFieldDelete: (index: number) => void;
+  selectedTheme: string;
 }) => {
   const getViewForm = (field: IFormFields) => {
     switch (field.fieldType) {
@@ -74,7 +75,7 @@ const FormFieldView = (props: {
         return (
           <div>
             <Select>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full bg-transparent">
                 <SelectValue placeholder={field.placeholder} />
               </SelectTrigger>
               <SelectContent>
@@ -93,7 +94,10 @@ const FormFieldView = (props: {
   };
 
   return (
-    <div className="border p-3 rounded-md shadow-sm">
+    <div
+      className="border p-3 rounded-md shadow-sm"
+      data-theme={props.selectedTheme}
+    >
       <h1 className="font-bold text-center text-2xl text-primary">
         {props.formValue.formTitle}
       </h1>
