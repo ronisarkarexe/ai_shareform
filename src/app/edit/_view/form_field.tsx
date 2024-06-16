@@ -10,9 +10,14 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import FieldEdit from "./field_edit";
 
-const FormFieldView = (props: { formData: IForm }): React.ReactElement => {
-//   console.log(props.formData);
+const FormFieldView = (props: {
+  formValue: IForm;
+  onFieldSaveUpdate: (value: any, index: number) => void;
+}) => {
+  //   console.log(props.formValue);
+
   const getViewForm = (field: IFormFields) => {
     switch (field.fieldType) {
       case "text":
@@ -61,7 +66,7 @@ const FormFieldView = (props: { formData: IForm }): React.ReactElement => {
                 htmlFor={field.fieldName}
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                {field?.checkboxLabel}
+                {field?.label}
               </label>
             </div>
           </div>
@@ -91,16 +96,26 @@ const FormFieldView = (props: { formData: IForm }): React.ReactElement => {
   return (
     <div className="border p-3 rounded-md shadow-sm">
       <h1 className="font-bold text-center text-2xl text-primary">
-        {props.formData.formTitle}
+        {props.formValue.formTitle}
       </h1>
       <h2 className="text-sm text-gray-500 text-center">
-        {props.formData.formSubheading}
+        {props.formValue.formHeading}
       </h2>
-      {props?.formData?.formFields?.length > 0 ? (
-        props.formData.formFields.map((field, index) => (
+      {props?.formValue?.fields?.length > 0 ? (
+        props.formValue?.fields?.map((field, index) => (
           <div key={index}>
             <div className="my-1">
-              <label className="text-sm text-primary">{field.fieldLabel}</label>
+              <div className="flex items-center justify-between ">
+                <label className="text-sm text-primary">
+                  {field.fieldTitle}
+                </label>
+                <FieldEdit
+                  defaultValue={field}
+                  onSaveUpdate={(value) =>
+                    props.onFieldSaveUpdate(value, index)
+                  }
+                />
+              </div>
               {getViewForm(field)}
             </div>
           </div>

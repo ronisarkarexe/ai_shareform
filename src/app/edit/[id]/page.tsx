@@ -8,7 +8,7 @@ import FormFieldView from "../_view/form_field";
 const EditForm = ({ params }: { params: { id: string } }) => {
   const { id } = params;
   const [data, setData] = useState<FormData | null>(null);
-  const [formData, setFormData] = useState<IForm[]>([]);
+  const [formData, setFormData] = useState<IForm | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -16,7 +16,7 @@ const EditForm = ({ params }: { params: { id: string } }) => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/api/v1/forms/0204bce7-a35e-45d7-a543-73c45533e2bb`
+          `http://localhost:8000/api/v1/forms/${id}`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -29,7 +29,7 @@ const EditForm = ({ params }: { params: { id: string } }) => {
             throw new Error("Invalid JSON format");
           }
           const jsonString = jsonMatch[0];
-          setFormData(JSON.parse(jsonString) as IForm[]);
+          setFormData(JSON.parse(jsonString) as IForm);
         }
       } catch (error) {
         console.log(error);
@@ -39,6 +39,59 @@ const EditForm = ({ params }: { params: { id: string } }) => {
     };
     fetchData();
   }, []);
+
+  const onFieldSaveUpdate = async (
+    value: {
+      label: string;
+      placeholder: string;
+    },
+    index: number
+  ) => {
+    const updatedFormFields =
+      formData &&
+      formData.fields.map((field, i) =>
+        i === index
+          ? {
+              ...field,
+              fieldTitle: value.label,
+              placeholder: value.placeholder,
+            }
+          : field
+      );
+    const newData = {
+      ...formData,
+      fields: updatedFormFields,
+    };
+
+    if (updatedFormFields != null) {
+      try {
+        const response = await fetch(
+          `http://localhost:8000/api/v1/forms/${id}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newData),
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          const jsonMatch = data.data.jsonForm.match(/{[\s\S]*}/);
+          if (!jsonMatch) {
+            throw new Error("Invalid JSON format");
+          }
+          const jsonString = jsonMatch[0];
+          setFormData(JSON.parse(jsonString) as IForm);
+        } else {
+          console.error("Form submission failed:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
+    }
+  };
 
   return (
     <div className="p-3">
@@ -53,7 +106,12 @@ const EditForm = ({ params }: { params: { id: string } }) => {
           controller
         </div>
         <div className="md:col-span-2 border border-primary rounded-md h-full p-3">
-          <FormFieldView formData={formData} />
+          {formData != null && (
+            <FormFieldView
+              formValue={formData}
+              onFieldSaveUpdate={onFieldSaveUpdate}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -39,7 +39,8 @@ const AddForm = () => {
           if (response.ok) {
             const data = await response.json();
             if (data.data.id) {
-              router.push(data.data.id);
+              console.log(data.data)
+              router.push('edit',data.data.id);
             }
             setLoading(false);
             setOpenDialog(false);

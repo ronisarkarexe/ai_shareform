@@ -5,17 +5,17 @@ export interface FormData {
   updatedAt: string;
 }
 export interface IFormFields {
-  fieldLabel: string;
+  fieldTitle: string;
   fieldName: string;
   fieldType: string;
   placeholder?: string;
   required: boolean;
   options?: string[];
-  checkboxLabel: string;
+  label?: string;
 }
 
 export interface IForm {
-  formSubheading: string;
+  formHeading: string;
   formTitle: string;
-  formFields: IFormFields[];
+  fields: IFormFields[];
 }
