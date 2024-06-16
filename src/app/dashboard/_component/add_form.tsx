@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { aiGenerateModel } from "@/ai_model/ai_model";
 import { PROMPT_TEXT } from "@/prompt/prompt";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const AddForm = () => {
   const [openDialog, setOpenDialog] = useState<boolean>(false);
@@ -39,8 +40,8 @@ const AddForm = () => {
           if (response.ok) {
             const data = await response.json();
             if (data.data.id) {
-              console.log(data.data)
-              router.push('edit',data.data.id);
+              toast("Form added successfully!");
+              router.push("edit", data.data.id);
             }
             setLoading(false);
             setOpenDialog(false);

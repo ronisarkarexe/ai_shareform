@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import FormFieldView from "../_view/form_field";
+import { toast } from "sonner";
 
 const EditForm = ({ params }: { params: { id: string } }) => {
   const { id } = params;
@@ -78,6 +79,7 @@ const EditForm = ({ params }: { params: { id: string } }) => {
 
         if (response.ok) {
           const data = await response.json();
+          toast("Field updated successfully!");
           const jsonMatch = data.data.jsonForm.match(/{[\s\S]*}/);
           if (!jsonMatch) {
             throw new Error("Invalid JSON format");
@@ -112,8 +114,9 @@ const EditForm = ({ params }: { params: { id: string } }) => {
               body: JSON.stringify(newData),
             }
           );
-  
+
           if (response.ok) {
+            toast("Field delete successfully!");
             const data = await response.json();
             const jsonMatch = data.data.jsonForm.match(/{[\s\S]*}/);
             if (!jsonMatch) {
