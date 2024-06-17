@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { IForm } from "@/model/form.model";
 import { Edit, Share, Trash } from "lucide-react";
 import Link from "next/link";
+import { RWebShare } from "react-web-share";
 import React from "react";
 import {
   AlertDialog,
@@ -48,9 +49,17 @@ const ViewFormList = (props: {
       <h1 className="text-sm text-gray-500">{formHeading}</h1>
       <hr className="my-3" />
       <div className="flex justify-between">
-        <Button variant="outline" size="sm" className="flex gap-1">
-          <Share className="h-4 w-4" /> Share
-        </Button>
+        <RWebShare
+          data={{
+            text: formHeading,
+            url: "http://localhost:3000/aiform/" + props.id,
+            title: formTitle,
+          }}
+        >
+          <Button variant="outline" size="sm" className="flex gap-1">
+            <Share className="h-4 w-4" /> Share
+          </Button>
+        </RWebShare>
         <Link href={"/edit/" + props.id}>
           <Button variant="outline" size="sm" className="flex gap-1">
             <Edit className="h-4 w-4" /> Edit

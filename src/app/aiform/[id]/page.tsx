@@ -25,7 +25,6 @@ const AIFormPage = ({ params }: { params: { id: string } }) => {
         }
         const result = await response.json();
         if (result.statusCode) {
-          setIsResponse(true);
           const jsonMatch = result.data.jsonForm.match(/{[\s\S]*}/);
           if (!jsonMatch) {
             throw new Error("Invalid JSON format");
