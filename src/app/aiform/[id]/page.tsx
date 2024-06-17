@@ -25,6 +25,7 @@ const AIFormPage = ({ params }: { params: { id: string } }) => {
         }
         const result = await response.json();
         if (result.statusCode) {
+          setIsResponse(true);
           const jsonMatch = result.data.jsonForm.match(/{[\s\S]*}/);
           if (!jsonMatch) {
             throw new Error("Invalid JSON format");
@@ -69,12 +70,11 @@ const AIFormPage = ({ params }: { params: { id: string } }) => {
     } catch (error) {
       setLoading(false);
     }
-    console.log("value", data);
   };
 
   return (
     <div className="flex items-center justify-center mt-5">
-      {isResponse ? (
+      {!isResponse ? (
         <div className="md:w-[600px]">
           {formData != null && (
             <FormFieldView

@@ -28,6 +28,8 @@ const AddForm = () => {
       if (result.response.text()) {
         const formData = {
           jsonForm: result.response.text(),
+          // .replace("```json", "")
+          // .replace("```", ""),
         };
         try {
           const response = await fetch("http://localhost:8000/api/v1/forms", {
@@ -41,7 +43,7 @@ const AddForm = () => {
             const data = await response.json();
             if (data.data.id) {
               toast("Form added successfully!");
-              router.push("/edit/", data.data.id);
+              router.push("/edit/" + data.data.id);
             }
             setLoading(false);
             setOpenDialog(false);

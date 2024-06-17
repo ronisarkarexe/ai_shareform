@@ -119,7 +119,7 @@ const FormFieldView = (props: {
       case "select":
         return (
           <div>
-            <Select
+            {/* <Select
               onValueChange={(v) => handelSelectChange(field.fieldName, v)}
             >
               <SelectTrigger className="w-full bg-transparent">
@@ -132,7 +132,7 @@ const FormFieldView = (props: {
                   </SelectItem>
                 ))}
               </SelectContent>
-            </Select>
+            </Select> */}
           </div>
         );
       default:

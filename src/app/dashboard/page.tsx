@@ -1,5 +1,6 @@
 import React from "react";
 import AddForm from "./_component/add_form";
+import FormList from "./_component/form_list";
 
 const DashboardPage = () => {
   return (
@@ -8,6 +9,7 @@ const DashboardPage = () => {
         <h1 className="font-bold text-3xl">Dashboard</h1>
         <AddForm />
       </div>
+      <FormList />
     </div>
   );
 };
